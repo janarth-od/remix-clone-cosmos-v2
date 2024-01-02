@@ -15,16 +15,22 @@ type Article = {
 };
 
 async function getArticles(): Promise<Article[]> {
-  return [
+  const request = new Request(
+    `https://api.contentful.com/spaces/${process.env.CONTENTFUL_SPACE_ID}/environments/${process.env.CONTENTFUL_ENVIRONMENT}/entries?&metadata.tags.sys.id[all]=blog&sys.contentType.sys.id=article`,
     {
-      slug: "my-first-post",
-      title: "My First Post",
-    },
-    {
-      slug: "90s-mixtape",
-      title: "A Mixtape I Made Just For You",
-    },
-  ];
+      headers: {
+        Authorization: `Bearer ${process.env.CONTENTFUL_MANAGEMENT_API_TOKEN}`,
+      },
+    }
+  )
+  const res = await fetch(request)
+  const articles = await res.json()
+  console.log({articles})
+
+  return articles.items.slice(0,5).map ((article) => ({
+    slug: article.fields.slug['en-US'],
+    title: article.fields.articleName['en-US'],
+  }))
 }
 
 export const loader = async () => {
@@ -50,7 +56,7 @@ export default function Articles() {
   return (
     <main>
       <h1>
-        Articles will go here!
+        Articles fetched from Contentful on server side!
       </h1>
       <div>
         {articles.map((article) => (
