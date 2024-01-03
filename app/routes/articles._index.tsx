@@ -3,7 +3,7 @@ import type { LinksFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { ContentTypeCollection } from 'contentful';
 
-import styles from '../../styles/articles.css';
+import styles from '../styles/articles.css';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
