@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node';
 import type { LinksFunction } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData, useRouteError } from '@remix-run/react';
 import { ContentTypeCollection } from 'contentful';
 
 import styles from '../styles/articles.css';
@@ -64,6 +64,16 @@ export default function Articles() {
           <ArticleCard key={article.slug} article={article} />
         ))}
       </div>
+    </main>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  console.error(error);
+  return (
+    <main>
+      <h1>Local Error boundary for Articles!</h1>
     </main>
   );
 }
